@@ -1,0 +1,267 @@
+mixed-port: 7890
+log-level: debug
+allow-lan: true
+#bind-address: '192.168.50.248'
+mode: rule
+ipv6: false
+interface-name: ens160
+dns:
+  enable: true
+  listen: 0.0.0.0:53
+  ipv6: false
+  enhanced-mode: redir-host
+  default-nameserver:
+    - 223.5.5.5:53
+    - 223.6.6.6:53
+  nameserver:
+    - 223.5.5.5:53
+    - 223.6.6.6:53
+  fallback:
+    - 8.8.4.4:53
+    - 8.8.8.8:53
+  fallback-filter:
+    geoip: true
+    geoip-code: CN
+    ipcidr:
+      - 240.0.0.0/4
+  nameserver-policy:
+    '+.essmart.co': '119.29.29.29'
+    '+.apcdns.net': '119.29.29.29'
+    '+.cdn-go.cn': '119.29.29.29'
+    '+.cdntip.com': '119.29.29.29'
+    '+.cdntips.com': '119.29.29.29'
+    '+.foxmail.com': '119.29.29.29'
+    '+.foxmail.com.cn': '119.29.29.29'
+    '+.gtimg.cn': '119.29.29.29'
+    '+.gtimg.com': '119.29.29.29'
+    '+.gtimg.com.cn': '119.29.29.29'
+    '+.idqqimg.com': '119.29.29.29'
+    '+.imqq.com': '119.29.29.29'
+    '+.myapp.com': '119.29.29.29'
+    '+.myqcloud.com': '119.29.29.29'
+    '+.qcloud.com': '119.29.29.29'
+    '+.qcloudimg.com': '119.29.29.29'
+    '+.qlogo.cn': '119.29.29.29'
+    '+.qpic.cn': '119.29.29.29'
+    '+.qq.com': '119.29.29.29'
+    '+.qqmail.com': '119.29.29.29'
+    '+.qzone.com': '119.29.29.29'
+    '+.rtx.com.cn': '119.29.29.29'
+    '+.servicewechat.com': '119.29.29.29'
+    '+.smtcdns.com': '119.29.29.29'
+    '+.smtcdns.net': '119.29.29.29'
+    '+.tencent.cn': '119.29.29.29'
+    '+.tencent.com': '119.29.29.29'
+    '+.tencent.com.cn': '119.29.29.29'
+    '+.tencent.com.hk': '119.29.29.29'
+    '+.tencent.net.cn': '119.29.29.29'
+    '+.tencent-cloud.com': '119.29.29.29'
+    '+.tencent-cloud.net': '119.29.29.29'
+    '+.tencentcs.com': '119.29.29.29'
+    '+.tencentmusic.com': '119.29.29.29'
+    '+.tencentyun.com': '119.29.29.29'
+    '+.tenpay.com': '119.29.29.29'
+    '+.wechat.com': '119.29.29.29'
+    '+.wegame.com': '119.29.29.29'
+    '+.wegame.com.cn': '119.29.29.29'
+    '+.weiyun.com': '119.29.29.29'
+    '+.alloyteam.com': '119.29.29.29'
+    '+.imweb.io': '119.29.29.29'
+    '+.ivweb.io': '119.29.29.29'
+    '+.dns.pub': '119.29.29.29'
+    '+.dnsapi.cn': '119.29.29.29'
+    '+.dnspod.cn': '119.29.29.29'
+    '+.dnspod.com': '119.29.29.29'
+    '+.dnspod.com.cn': '119.29.29.29'
+    '+.dnspod.net': '119.29.29.29'
+    '+.dnspod.org': '119.29.29.29'
+    '+.dnsv1.com': '119.29.29.29'
+    '+.dnsv2.com': '119.29.29.29'
+    '+.dnsv3.com': '119.29.29.29'
+    '+.dnsv4.com': '119.29.29.29'
+    '+.dnsv5.com': '119.29.29.29'
+    '+.doh.pub': '119.29.29.29'
+
+tun:
+  enable: true
+  stack: system
+  dns-hijack:
+    - 1.0.0.1:53
+
+proxies:
+  - name: "trojan-smcnh"
+    type: trojan
+    server: smcnh.essmart.co
+    port: 52432
+    password: ncz2TDM8btr6ext@kaj
+    udp: true
+    sni: ov01.essmart.co
+
+  - name: "trojan-ov01"
+    type: trojan
+    server: ov01.essmart.co
+    port: 52432
+    password: ncz2TDM8btr6ext@kaj
+    udp: true
+    sni: ov01.essmart.co
+
+  - name: "trojan-ov01-driect"
+    type: trojan
+    server: ov01.essmart.co
+    port: 54433
+    password: ncz2TDM8btr6ext@kaj
+    udp: true
+    sni: ov01.essmart.co
+
+  - name: "trojan-ov01-100m"
+    type: trojan
+    server: cg16zk7f.hmbcloud.net
+    port: 32843
+    password: ncz2TDM8btr6ext@kaj
+    udp: true
+    sni: ov01.essmart.co
+
+  - name: "trojan-ov01-azure"
+    type: trojan
+    server: ov01.essmart.co
+    port: 42432
+    password: ncz2TDM8btr6ext@kaj
+    udp: true
+    sni: ov01.essmart.co
+
+  - name: "trojan-ov01-azure-100m"
+    type: trojan
+    server: cg16zk7f.hmbcloud.net
+    port: 32832
+    password: ncz2TDM8btr6ext@kaj
+    udp: true
+    sni: ov01.essmart.co
+
+  - name: "trojan-xtls-ov01"
+    type: trojan
+    server: ov01.essmart.co
+    port: 55231
+    password: ncz2TDM8btr6ext@kaj
+    udp: true
+    sni: ov01.essmart.co
+    
+proxy-groups:
+  - name: auto
+    type: fallback
+    proxies:
+      - trojan-ov01
+      - trojan-xtls-ov01
+      - trojan-ov01-100m
+      - trojan-ov01-azure-100m
+      - trojan-ov01-azure
+      - trojan-ov01-driect
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+
+rule-providers:
+  reject:
+    type: http
+    behavior: domain
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/reject.txt"
+    path: ./ruleset/reject.yaml
+    interval: 86400
+
+  icloud:
+    type: http
+    behavior: domain
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/icloud.txt"
+    path: ./ruleset/icloud.yaml
+    interval: 86400
+
+  apple:
+    type: http
+    behavior: domain
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/apple.txt"
+    path: ./ruleset/apple.yaml
+    interval: 86400
+
+  google:
+    type: http
+    behavior: domain
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/google.txt"
+    path: ./ruleset/google.yaml
+    interval: 86400
+
+  proxy:
+    type: http
+    behavior: domain
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/proxy.txt"
+    path: ./ruleset/proxy.yaml
+    interval: 86400
+
+  direct:
+    type: http
+    behavior: domain
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/direct.txt"
+    path: ./ruleset/direct.yaml
+    interval: 86400
+
+  private:
+    type: http
+    behavior: domain
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/private.txt"
+    path: ./ruleset/private.yaml
+    interval: 86400
+
+  gfw:
+    type: http
+    behavior: domain
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/gfw.txt"
+    path: ./ruleset/gfw.yaml
+    interval: 86400
+
+  greatfire:
+    type: http
+    behavior: domain
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/greatfire.txt"
+    path: ./ruleset/greatfire.yaml
+    interval: 86400
+
+  tld-not-cn:
+    type: http
+    behavior: domain
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/tld-not-cn.txt"
+    path: ./ruleset/tld-not-cn.yaml
+    interval: 86400
+
+  telegramcidr:
+    type: http
+    behavior: ipcidr
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/telegramcidr.txt"
+    path: ./ruleset/telegramcidr.yaml
+    interval: 86400
+
+  cncidr:
+    type: http
+    behavior: ipcidr
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/cncidr.txt"
+    path: ./ruleset/cncidr.yaml
+    interval: 86400
+
+  lancidr:
+    type: http
+    behavior: ipcidr
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/lancidr.txt"
+    path: ./ruleset/lancidr.yaml
+    interval: 86400
+
+rules:
+  - DOMAIN-SUFFIX,clash.razord.top,DIRECT
+  - DOMAIN-SUFFIX,yacd.haishan.me,DIRECT
+  - DOMAIN-SUFFIX,apple.com,DIRECT
+  - DOMAIN-SUFFIX,essmart.co,DIRECT
+  - RULE-SET,private,DIRECT
+  - RULE-SET,icloud,DIRECT
+  - RULE-SET,apple,DIRECT
+  - RULE-SET,proxy,auto
+  - RULE-SET,direct,DIRECT
+  - RULE-SET,lancidr,DIRECT
+  - RULE-SET,cncidr,DIRECT
+  - RULE-SET,telegramcidr,auto
+  - GEOIP,CN,DIRECT
+  - MATCH,auto
