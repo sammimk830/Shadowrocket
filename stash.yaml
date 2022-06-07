@@ -1,0 +1,215 @@
+mode: rule
+log-level: info
+script:
+  shortcuts:
+    quic: network == 'udp' and (dst_port == 443 or dst_port == 4483 or dst_port == 9305) # 可以在 rule 中引用
+
+dns:
+  default-nameserver:
+    - 223.5.5.5
+    - 223.6.6.6
+    - 119.29.29.29
+    - system
+
+  fake-ip-filter:
+    - '*.locallan'
+    - '*.lan'
+    - '*.localdomain'
+    - '*.example'
+    - '*.invalid'
+    - '*.localhost'
+    - '*.test'
+    - '*.local'
+    - '*.home.arpa'
+    - 'time.*.com'
+    - 'time.*.gov'
+    - 'time.*.edu.cn'
+    - 'time.*.apple.com'
+    - 'time1.*.com'
+    - 'time2.*.com'
+    - 'time3.*.com'
+    - 'time4.*.com'
+    - 'time5.*.com'
+    - 'time6.*.com'
+    - 'time7.*.com'
+    - 'ntp.*.com'
+    - 'ntp1.*.com'
+    - 'ntp2.*.com'
+    - 'ntp3.*.com'
+    - 'ntp4.*.com'
+    - 'ntp5.*.com'
+    - 'ntp6.*.com'
+    - 'ntp7.*.com'
+    - '*.time.edu.cn'
+    - '*.ntp.org.cn'
+    - '+.pool.ntp.org'
+    - 'time1.cloud.tencent.com'
+    - 'music.163.com'
+    - '*.music.163.com'
+    - '*.126.net'
+    - 'musicapi.taihe.com'
+    - 'music.taihe.com'
+    - 'songsearch.kugou.com'
+    - 'trackercdn.kugou.com'
+    - '*.kuwo.cn'
+    - 'api-jooxtt.sanook.com'
+    - 'api.joox.com'
+    - 'joox.com'
+    - 'y.qq.com'
+    - '*.y.qq.com'
+    - 'streamoc.music.tc.qq.com'
+    - 'mobileoc.music.tc.qq.com'
+    - 'isure.stream.qqmusic.qq.com'
+    - 'dl.stream.qqmusic.qq.com'
+    - 'aqqmusic.tc.qq.com'
+    - 'amobile.music.tc.qq.com'
+    - '*.xiami.com'
+    - '*.music.migu.cn'
+    - 'music.migu.cn'
+    - '*.msftconnecttest.com'
+    - '*.msftncsi.com'
+    - 'msftconnecttest.com'
+    - 'msftncsi.com'
+    - 'localhost.ptlogin2.qq.com'
+    - 'localhost.sec.qq.com'
+    - '+.srv.nintendo.net'
+    - '+.stun.playstation.net'
+    - 'xbox.*.microsoft.com'
+    - 'xnotify.xboxlive.com'
+    - '+.battlenet.com.cn'
+    - '+.wotgame.cn'
+    - '+.wggames.cn'
+    - '+.wowsgame.cn'
+    - '+.wargaming.net'
+    - 'proxy.golang.org'
+    - 'stun.*.*'
+    - 'stun.*.*.*'
+    - '+.stun.*.*'
+    - '+.stun.*.*.*'
+    - '+.stun.*.*.*.*'
+    - 'heartbeat.belkin.com'
+    - '*.linksys.com'
+    - '*.linksyssmartwifi.com'
+    - '*.router.asus.com'
+    - 'mesu.apple.com'
+    - 'swscan.apple.com'
+    - 'swquery.apple.com'
+    - 'swdownload.apple.com'
+    - 'swcdn.apple.com'
+    - 'swdist.apple.com'
+    - 'lens.l.google.com'
+    - 'stun.l.google.com'
+    - '+.nflxvideo.net'
+    - '*.square-enix.com'
+    - '*.finalfantasyxiv.com'
+    - '*.ffxiv.com'
+proxies:
+  - name: "vless-ov01-azure"
+    type: vless
+    server: ov01az.essmart.co
+    port: 443
+    password: 118e3d54-27ad-4da9-a455-12b7cd6a7060
+    udp: true
+    sni: ov01.essmart.co
+    tls: true
+    network: tcp
+
+  - name: "vless-ov01-hgcdc"
+    type: vless
+    server: hgcdc.essmart.co
+    port: 443
+    password: 118e3d54-27ad-4da9-a455-12b7cd6a7060
+    udp: true
+    sni: ov01.essmart.co
+    tls: true
+    network: tcp
+
+proxy-groups:
+  - name: Proxy
+    type: select
+    proxies:
+      - vless-ov01-azure
+      - vless-ov01-hgcdc
+
+rule-providers:
+  reject:
+    behavior: domain-text
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/reject.txt"
+    interval: 86400
+
+  icloud:
+    behavior: domain-text
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/icloud.txt"
+    interval: 86400
+
+  apple:
+    behavior: domain-text
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/apple.txt"
+    interval: 86400
+
+  google:
+    behavior: domain-text
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/google.txt"
+    interval: 86400
+
+  proxy:
+    behavior: domain-text
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/proxy.txt"
+    interval: 86400
+
+  direct:
+    behavior: domain-text
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/direct.txt"
+    interval: 86400
+
+  private:
+    behavior: domain-text
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/private.txt"
+    interval: 86400
+
+  gfw:
+    behavior: domain-text
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/gfw.txt"
+    interval: 86400
+
+  greatfire:
+    behavior: domain-text
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/greatfire.txt"
+    interval: 86400
+
+  tld-not-cn:
+    behavior: domain-text
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/tld-not-cn.txt"
+    interval: 86400
+
+  telegramcidr:
+    behavior: ipcidr
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/telegramcidr.txt"
+    interval: 86400
+
+  cncidr:
+    behavior: ipcidr
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/cncidr.txt"
+    interval: 86400
+
+  lancidr:
+    behavior: ipcidr
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/lancidr.txt"
+    interval: 86400
+
+rules:
+  - SCRIPT,quic,REJECT
+  - DOMAIN-SUFFIX,essmart.co,DIRECT
+  - DOMAIN-SUFFIX,apple.com.akadns.net,DIRECT
+  - DOMAIN-SUFFIX,apple.com,DIRECT
+  - DOMAIN-SUFFIX,cdn-apple.com,DIRECT
+  - RULE-SET,private,DIRECT
+  - RULE-SET,icloud,DIRECT
+  - RULE-SET,apple,DIRECT
+  - RULE-SET,proxy,Proxy
+  - RULE-SET,direct,DIRECT
+  - RULE-SET,telegramcidr,Proxy
+  - RULE-SET,lancidr,DIRECT
+  - RULE-SET,cncidr,DIRECT
+  - GEOIP,CN,DIRECT
+  - MATCH,Proxy
