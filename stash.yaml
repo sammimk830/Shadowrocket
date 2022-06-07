@@ -108,9 +108,9 @@ proxies:
     type: vless
     server: ov01az.essmart.co
     port: 443
-    password: 118e3d54-27ad-4da9-a455-12b7cd6a7060
+    uuid: 118e3d54-27ad-4da9-a455-12b7cd6a7060
     udp: true
-    sni: ov01.essmart.co
+    servername: ov01.essmart.co
     tls: true
     network: tcp
 
@@ -118,9 +118,9 @@ proxies:
     type: vless
     server: hgcdc.essmart.co
     port: 443
-    password: 118e3d54-27ad-4da9-a455-12b7cd6a7060
+    uuid: 118e3d54-27ad-4da9-a455-12b7cd6a7060
     udp: true
-    sni: ov01.essmart.co
+    servername: ov01.essmart.co
     tls: true
     network: tcp
 
