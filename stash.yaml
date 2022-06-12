@@ -132,11 +132,6 @@ proxy-groups:
       - vless-ov01-hgcdc
 
 rule-providers:
-  reject:
-    behavior: domain-text
-    url: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/reject.txt"
-    interval: 86400
-
   icloud:
     behavior: domain-text
     url: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/icloud.txt"
@@ -145,11 +140,6 @@ rule-providers:
   apple:
     behavior: domain-text
     url: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/apple.txt"
-    interval: 86400
-
-  google:
-    behavior: domain-text
-    url: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/google.txt"
     interval: 86400
 
   proxy:
@@ -165,21 +155,6 @@ rule-providers:
   private:
     behavior: domain-text
     url: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/private.txt"
-    interval: 86400
-
-  gfw:
-    behavior: domain-text
-    url: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/gfw.txt"
-    interval: 86400
-
-  greatfire:
-    behavior: domain-text
-    url: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/greatfire.txt"
-    interval: 86400
-
-  tld-not-cn:
-    behavior: domain-text
-    url: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/tld-not-cn.txt"
     interval: 86400
 
   telegramcidr:
