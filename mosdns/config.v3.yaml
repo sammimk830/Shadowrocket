@@ -1,0 +1,261 @@
+log:
+  level: info
+  file: "/var/log/mosdns.log"
+
+plugin:
+  ################# 服务插件 ################
+
+  - tag: main_server # 启动服务器
+    type: server
+    args:
+      entry:        
+        - main_sequence
+      server:
+        - protocol: udp
+          addr: ":53"
+        - protocol: tcp
+          addr: ":53"
+
+  ################# 可执行插件 ################
+
+  - tag: main_sequence
+    type: sequence
+    args:
+      exec:
+        - _single_flight
+        - redis-cache
+
+        - if:
+            - query_is_cn_domain # 已知的本地域名
+            - query_is_microsoft_domain
+            - '!_query_is_common'
+          exec:
+            # - ecs-china
+            - _prefer_ipv4
+            - forward_cn # 用本地服务器
+            - _return
+
+        - if:
+            - query_is_non_cn_domain # 已知的非本地域名
+          exec:
+            - ecs-hk
+            - _prefer_ipv4
+            - forward_remote # 用远程服务器
+            - _return
+
+        # 剩下的未知域名用 IP 分流。以下是"顺序 IP 分流"的逻辑。很稳定，不易出错。
+        # <高级> 如果想用"并发 IP 分流"逻辑，从下文的 <并发 IP 分流示例> 里选择一个方案，
+        # 然后将下面几行替换掉。
+        # - forward_local # 先请求转发至本地服务器
+        # - if:
+        #     - response_has_local_ip # 如果(本地)应答包含本地 IP
+        #   exec:
+        #     - _return # 就直接采用结果
+        # - forward_remote # 否则去请求远程服务器的结果
+        - primary:
+            #- ecs-china
+            - _prefer_ipv4
+            - forward_cn
+            - if:
+                - "!response_has_cn_ip"
+              exec:
+                - _drop_response
+          secondary:
+            - ecs-hk
+            - _prefer_ipv4
+            - forward_remote
+          fast_fallback: 200 
+            # 这里建议设置成 local 服务器正常延时的 2~5 倍。
+            # 这个延时保证了 local 延时偶尔变高时，其结果不会被 remote 抢答。
+            # 如果 local 超过这个延时还没响应，可以假设 local 出现了问题。
+            # 这时用就采用 remote 的应答。
+          always_standby: true
+
+  - tag: forward_cn # 转发至本地服务器的插件
+    type: fast_forward
+    args:
+      upstream:
+        - addr: 'tls://1.12.12.12'
+          trusted: true
+          idle_timeout: 60
+          enable_pipeline: true
+          enable_http3: false
+          max_conns: 2
+          insecure_skip_verify: false
+        - addr: 'tls://120.53.53.53'
+          trusted: true
+          idle_timeout: 60
+          enable_pipeline: true
+          enable_http3: false
+          max_conns: 2
+          insecure_skip_verify: false
+        - addr: 'tls://223.5.5.5'
+          trusted: true
+          idle_timeout: 8
+          enable_pipeline: false
+          enable_http3: false
+          max_conns: 2
+          insecure_skip_verify: false
+        - addr: 'tls://223.6.6.6'
+          trusted: true
+          idle_timeout: 8
+          enable_pipeline: false
+          enable_http3: false
+          max_conns: 2
+          insecure_skip_verify: false
+
+  - tag: forward_dnsdop # 转发至本地服务器的插件
+    type: fast_forward
+    args:
+      upstream:
+        - addr: 'tls://1.12.12.12'
+          trusted: true
+          idle_timeout: 60
+          enable_pipeline: true
+          enable_http3: false
+          max_conns: 2
+          insecure_skip_verify: false
+        - addr: 'tls://120.53.53.53'
+          trusted: true
+          idle_timeout: 60
+          enable_pipeline: true
+          enable_http3: false
+          max_conns: 2
+          insecure_skip_verify: false
+        
+
+  - tag: forward_alibaba # 转发至本地服务器的插件
+    type: fast_forward
+    args:
+      upstream:
+        - addr: 'tls://223.5.5.5'
+          trusted: true
+          idle_timeout: 8
+          enable_pipeline: false
+          enable_http3: false
+          max_conns: 2
+          insecure_skip_verify: false
+        - addr: 'tls://223.6.6.6'
+          trusted: true
+          idle_timeout: 8
+          enable_pipeline: false
+          enable_http3: false
+          max_conns: 2
+          insecure_skip_verify: false
+
+  - tag: forward_remote # 转发至远程服务器的插件
+    type: fast_forward
+    args:
+      upstream:
+        # - addr: 'tcp://192.168.50.250:53'
+        #   trusted: true
+        #   idle_timeout: 120
+        #   enable_pipeline: true
+        #   enable_http3: false
+        #   max_conns: 2
+        #   insecure_skip_verify: false
+        #- addr: 'tcp://192.168.50.250:55222'
+        #  trusted: true
+        - addr: 'tls://8.8.8.8:853'
+          socks5: '192.168.50.248:7890'
+          trusted: true
+          idle_timeout: 30
+          enable_pipeline: true
+          enable_http3: false
+          max_conns: 2
+          insecure_skip_verify: false
+
+  ################ 匹配器插件 #################
+
+  - tag: query_is_cn_domain # 匹配本地域名的插件
+    type: query_matcher
+    args:
+      domain:
+        - 'essmart.co'
+        - "ext:./geosite.dat:cn"
+        - "ext:./geosite.dat:apple"
+        - "ext:./geosite.dat:apple-cn"
+        - 'ext:./geosite.dat:icloud'
+
+  - tag: query_is_non_cn_domain # 匹配非本地域名的插件
+    type: query_matcher
+    args:
+      domain:
+        - "ext:./geosite.dat:geolocation-!cn"
+
+  - tag: query_is_ad_domain # 匹配广告域名的插件
+    type: query_matcher
+    args:
+      domain:
+        - "ext:./geosite.dat:category-ads-all"
+
+  - tag: response_has_cn_ip # 匹配本地 IP 的插件
+    type: response_matcher
+    args:
+      ip:
+        - "ext:./geoip.dat:cn"
+
+  - tag: query_is_tencent_domain # 匹配本地域名的插件
+    type: query_matcher
+    args:
+      domain:
+        - "ext:./geosite.dat:tencent"
+
+  - tag: query_is_alibaba_domain # 匹配本地域名的插件
+    type: query_matcher
+    args:
+      domain:
+        - "ext:./geosite.dat:alibaba"
+
+  - tag: query_is_microsoft_domain # 匹配本地域名的插件
+    type: query_matcher
+    args:
+      domain:
+        - "ext:./geosite.dat:microsoft"
+
+  # 自动获取本机外网地址作为 ECS 地址。
+  - tag: 'ecs-china'
+    type: 'ecs'
+    args:
+      auto: false
+      force_overwrite: true
+      ipv4: '222.248.228.44'
+
+  - tag: 'ecs-hk'
+    type: 'ecs'
+    args:
+      auto: false
+      force_overwrite: true
+      ipv4: '20.239.187.25'
+
+  - tag: 'redis-cache'
+    type: 'cache'
+    args:
+      size: 1024  # 内存缓存大小。单位: 条。默认: 1024。每个 cache 插件的缓存是独立的。
+
+      # redis 外部缓存地址。
+      # 如果非空，将使用外部 redis 作为缓存。size 参数将不会有用。缓存大小由 redis 控制。
+      # cache 不会删除 redis 中的数据，但会为数据设定 TTL。
+      # redis 需要 v2 及以上版本。如果多个 cache 插件连接到同一个 redis 数据库，数据是共享的。
+      # TCP 连接: `redis://<user>:<password>@<host>:<port>/<db_number>`
+      # Unix 连接: `unix://<user>:<password>@</path/to/redis.sock>?db=<db_number>`
+      redis: 'redis://127.0.0.1:6379/0'
+
+      # redis 超时。单位: 毫秒。默认: 50。
+      # 如果 redis 在该时间内无响应，cache 会认为 redis 出现了问题。cache 会临时停用 redis 并
+      # 跳过所有请求。同时间歇性尝试 ping redis，直至再次成功连接。
+      redis_timeout: 50
+
+      # lazy cache 设定。lazy_cache_ttl > 0 会启用 lazy cache。
+      # 所有应答都会在缓存中存留 lazy_cache_ttl 秒。
+      # 如果命中过期的应答，则会立即返回 TTL 为 lazy_cache_reply_ttl 的应答，然后后台去更新该应答。
+      lazy_cache_ttl: 0        # lazy cache 生存时间。单位: 秒。默认: 0 (禁用 lazy cache)。
+                              # RFC 8767 的建议值 86400（1天）~ 259200（3天）
+      lazy_cache_reply_ttl: 30 # 返回过期应答的 TTL。默认 30 (RFC 8767 的建议值)。
+
+      cache_everything: true  # cache 默认只缓存有且只有一个 Question 的请求的应答。启用后可强制
+                              # 缓存所有应答。
+                              # 注意: 不要启用这个选项，除非你知道自己在做什么。这个选项会简单粗暴
+                              # 的将完整的请求作为 key，不管请求里包含什么记录。启用后可能会严重降低
+                              # 缓存命中率。mosdns 没有能力单独处理各种 DNS 记录。如果需要功能更精细
+                              # 完整的 cache，请用专业软件，比如 unbound。
