@@ -64,6 +64,13 @@ plugins:
           enable_http3: false
           max_conns: 2
           insecure_skip_verify: false
+        - addr: 'tcp://192.168.50.250'
+          trusted: true
+          idle_timeout: 118
+          enable_pipeline: true
+          enable_http3: false
+          max_conns: 2
+          insecure_skip_verify: false
 
   # 匹配本地域名的插件
   - tag: query_is_cn_domain
