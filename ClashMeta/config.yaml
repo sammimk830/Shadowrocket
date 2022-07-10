@@ -84,6 +84,7 @@ rules:
   - GEOSITE,microsoft@cn,DIRECT
   - GEOSITE,geolocation-cn,DIRECT
   - GEOSITE,geolocation-!cn,auto
+  - DOMAIN-SUFFIX,googleapis.cn,auto
   - GEOIP,telegram,auto,no-resolve
   - GEOIP,private,DIRECT,no-resolve
   - GEOIP,cn,DIRECT
