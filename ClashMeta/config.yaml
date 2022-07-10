@@ -11,9 +11,9 @@ dns:
   ipv6: false
   enhanced-mode: redir-host
   fake-ip-range: 198.18.0.1/16
+  listen: 0.0.0.0:53
   default-nameserver:
     - 119.29.29.29:53
-    - system
   nameserver:
     - tls://1.12.12.12:853
     - tls://120.53.53.53:853
@@ -24,6 +24,9 @@ dns:
     geoip: false
     geosite: 
       - geolocation-!cn
+  nameserver-policy:
+    '+.locallan': '192.168.50.253'
+    '+.in-addr.arpa': '192.168.50.253'
 
 tun:
   enable: true
