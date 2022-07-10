@@ -18,6 +18,8 @@ dns:
     geoip: false
     geosite: 
       - geolocation-!cn
+  nameserver-policy:
+    '+.essmart.co': '119.29.29.29'
 proxies:
   - name: "vless-tcp-ov01"
     type: vless

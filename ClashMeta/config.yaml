@@ -27,6 +27,7 @@ dns:
   nameserver-policy:
     '+.locallan': '192.168.50.253'
     '+.in-addr.arpa': '192.168.50.253'
+    '+.essmart.co': '119.29.29.29'
 
 tun:
   enable: true
