@@ -1,3 +1,24 @@
+mode: rule
+ipv6: false
+dns:
+  enable: true
+  use-hosts: true
+  ipv6: false
+  enhanced-mode: redir-host
+  fake-ip-range: 198.18.0.1/16
+  default-nameserver:
+    - 119.29.29.29:53
+    - system
+  nameserver:
+    - tls://1.12.12.12:853
+    - tls://120.53.53.53:853
+  fallback:
+    - 'tls://8.8.4.4:853#select'
+    - 'tls://8.8.8.8:853#select'
+  fallback-filter:
+    geoip: false
+    geosite: 
+      - geolocation-!cn
 proxies:
   - name: "vless-tcp-ov01"
     type: vless
