@@ -1,0 +1,49 @@
+proxies:
+  - name: "vless-tcp-ov01"
+    type: vless
+    server: ov01.essmart.co
+    port: 32432
+    uuid: 118e3d54-27ad-4da9-a455-12b7cd6a7060
+    udp: true
+    tls: true
+    network: tcp
+    servername: ov01.essmart.co # AKA SNI
+  - name: "vless-tcp-ov01hgc"
+    type: vless
+    server: ov01.essmart.co
+    port: 55230
+    uuid: 118e3d54-27ad-4da9-a455-12b7cd6a7060
+    udp: true
+    tls: true
+    network: tcp
+    servername: ov01.essmart.co # AKA SNI
+  - name: "vless-tcp-ov01az"
+    type: vless
+    server: ov01az.essmart.co
+    port: 443
+    uuid: 118e3d54-27ad-4da9-a455-12b7cd6a7060
+    udp: true
+    tls: true
+    network: tcp
+    servername: ov01.essmart.co # AKA SNI
+proxy-groups:
+  - name: select
+    type: select
+    proxies:
+      - vless-tcp-ov01
+      - vless-tcp-ov01hgc
+      - vless-tcp-ov01az
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+
+rules:
+  - GEOSITE,icloud@cn,DIRECT
+  - GEOSITE,apple@cn,DIRECT
+  - GEOSITE,apple-cn,DIRECT
+  - GEOSITE,microsoft@cn,DIRECT
+  - GEOSITE,geolocation-cn,DIRECT
+  - GEOSITE,geolocation-!cn,select
+  - GEOIP,telegram,select,no-resolve
+  - GEOIP,private,DIRECT,no-resolve
+  - GEOIP,cn,DIRECT
+  - MATCH,select
