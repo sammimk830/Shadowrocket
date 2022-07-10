@@ -59,6 +59,8 @@ proxy-groups:
     interval: 300
 
 rules:
+  # multiport condition for rules SRC-PORT and DST-PORT
+  - DST-PORT,123/136/137-139,DIRECT,udp
   - GEOSITE,icloud@cn,DIRECT
   - GEOSITE,apple@cn,DIRECT
   - GEOSITE,apple-cn,DIRECT
