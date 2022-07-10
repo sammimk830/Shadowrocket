@@ -18,8 +18,8 @@ dns:
     - tls://1.12.12.12:853
     - tls://120.53.53.53:853
   fallback:
-    - 'tls://8.8.4.4:853#select'
-    - 'tls://8.8.8.8:853#select'
+    - 'tls://8.8.4.4:853#auto'
+    - 'tls://8.8.8.8:853#auto'
   fallback-filter:
     geoip: false
     geosite: 
@@ -43,6 +43,15 @@ proxies:
     tls: true
     network: tcp
     servername: ov01.essmart.co # AKA SNI
+  - name: "vless-tcp-ov01hgc"
+    type: vless
+    server: ov01.essmart.co
+    port: 55230
+    uuid: 118e3d54-27ad-4da9-a455-12b7cd6a7060
+    udp: true
+    tls: true
+    network: tcp
+    servername: ov01.essmart.co # AKA SNI
   - name: "vless-tcp-ov01az"
     type: vless
     server: ov01az.essmart.co
@@ -57,6 +66,7 @@ proxy-groups:
     type: fallback
     proxies:
       - vless-tcp-ov01
+      - vless-tcp-ov01hgc
       - vless-tcp-ov01az
     url: http://www.gstatic.com/generate_204
     interval: 300
