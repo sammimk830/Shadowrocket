@@ -1,0 +1,142 @@
+{
+    "log": {
+        "access": "",
+        "error": "/var/log/xray/error.log",
+        "loglevel": "warning",
+        "dnsLog": true
+    },
+    "policy": {
+        "levels": {
+            "0": {
+                "handshake": 10,
+                "connIdle": 300,
+                "uplinkOnly": 0,
+                "downlinkOnly": 0,
+                "statsUserUplink": false,
+                "statsUserDownlink": false,
+                "bufferSize": 20240
+            }
+        },
+        "system": {
+            "statsInboundUplink": false,
+            "statsInboundDownlink": false,
+            "statsOutboundUplink": false,
+            "statsOutboundDownlink": false
+        }
+    },
+    "inbounds": [
+        {
+            "protocol": "vless",
+            "listen": "0.0.0.0",
+            "port": 55230,
+            "settings": {
+                "clients": [
+                    {
+                        "id": "118e3d54-27ad-4da9-a455-12b7cd6a7060",
+                        "level": 0,
+                        "email": "sammi.mak@cloudnifier.com"
+                    },
+                    {
+                        "id": "e0627847-f62f-4f83-8600-4e1e75749538",
+                        "level": 0,
+                        "email": "kevin.chan@cloudnifier.com"
+                    }
+                ],
+                "decryption": "none",
+                "fallbacks": [
+                    {
+                        "dest": "@trojan"
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "tls",
+                "tlsSettings": {
+                    "rejectUnknownSni": true,
+                    "minVersion": "1.2",
+                    "serverName": "ov01.essmart.co",
+                    "alpn": [
+                        "h2",
+                        "http/1.1"
+                    ],
+                    "certificates": [
+                        {
+                            "certificateFile": "/usr/local/etc/cert/ov01.essmart.co_bundle.crt",
+                            "keyFile": "/usr/local/etc/cert/ov01.essmart.co.key"
+                        }
+                    ]
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls"
+                ]
+            }
+        },
+        {
+            "protocol": "trojan",
+            "listen": "@trojan",
+            "settings": {
+                "clients": [
+                    {
+                        "password": "ncz2TDM8btr6ext@kaj",
+                        "level": 0,
+                        "email": "sammi.mak@cloudnifier.com"
+                    },
+                    {
+                        "password": "kfg1ynh!rfy8TMD2egw",
+                        "level": 0,
+                        "email": "kevin.chan@cloudnifier.com"
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "none",
+                "tcpSettings": {
+                    "acceptProxyProtocol": false
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls"
+                ]
+            }
+        }
+    ],
+    "outbounds": [
+        {
+            "tag": "direct",
+            "protocol": "freedom",
+            "settings": {
+                "domainStrategy": "UseIPv4"
+            }
+        },
+        {
+            "tag": "block",
+            "protocol": "blackhole",
+            "settings": {
+                "response": {
+                    "type": "http"
+                }
+            }
+        }
+    ],
+    "routing": {
+        "domainStrategy": "IPIfNonMatch",
+        "rules": [
+            {
+                "type": "field",
+                "ip": [
+                    "geoip:cn"
+                ],
+                "outboundTag": "block"
+            }
+        ]
+    }
+}
