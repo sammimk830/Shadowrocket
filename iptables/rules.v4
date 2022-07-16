@@ -32,6 +32,7 @@ COMMIT
 -A INPUT -i lo -j ACCEPT
 -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
 -A INPUT -p tcp -m tcp --dport 26542 -j ACCEPT
+
 -A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
 
 # HK AZURE XRAY
