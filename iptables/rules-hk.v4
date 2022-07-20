@@ -18,6 +18,10 @@
 -A PREROUTING -d 10.1.0.26 -p udp --dport 55229 -j DNAT --to-destination 210.3.211.10:55229
 -A POSTROUTING -d 210.3.211.10 -p udp --dport 55229 -j SNAT --to-source 38.126.55.202
 
+# HK HGC WireGuard
+-A PREROUTING -d 10.1.0.26 -p udp --dport 51828 -j DNAT --to-destination 210.3.211.10:51828
+-A POSTROUTING -d 210.3.211.10 -p udp --dport 51828 -j SNAT --to-source 38.126.55.202
+
 COMMIT
 # Completed on Sat Jul 16 09:21:35 2022
 
