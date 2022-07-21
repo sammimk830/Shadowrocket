@@ -82,7 +82,7 @@ rules:
   - GEOSITE,apple@cn,DIRECT
   - GEOSITE,apple-cn,DIRECT
   - GEOSITE,microsoft@cn,DIRECT
-  - GEOSITE,geolocation-cn,DIRECT
+  # - GEOSITE,geolocation-cn,DIRECT
   - GEOSITE,geolocation-!cn,auto
   - DOMAIN-SUFFIX,googleapis.cn,auto
   - GEOIP,telegram,auto,no-resolve
